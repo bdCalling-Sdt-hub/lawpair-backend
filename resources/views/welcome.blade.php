@@ -7,6 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-    <a href="{{route('google.login')}}">Login with Google</a>
+    {{-- server is running mesage --}}
+    <p>Server is running...</p>
 </body>
 </html>
