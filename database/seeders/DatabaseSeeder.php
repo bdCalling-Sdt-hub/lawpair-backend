@@ -18,18 +18,18 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
         $avatars = collect(glob(public_path('img/*.*')))->random(); // Random single image from public/img folder
         User::create([
-            'first_name' => 'Kazi Omar',
-            'last_name' => 'Faruk',
-            'phone' => fake()->optional()->phoneNumber(),
-            'email' => 'admin@gmail.com',
+            'first_name' => 'Law',
+            'last_name' => 'Pair',
+            'phone' => '01700000000',
+            'email' => 'lawpair@gmail.com',
             'email_verified_at' =>  now(),
             'avatar' => Storage::putFile('uploads/avatars', $avatars),
-            'password' => Hash::make('12345678'),
+            'password' => Hash::make('LawPair123'), //
             'role' => 'admin',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
-        $this->call(UserSeeder::class);
+        // $this->call(UserSeeder::class);
     }
 }
