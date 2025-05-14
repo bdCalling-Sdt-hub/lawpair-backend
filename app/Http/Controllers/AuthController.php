@@ -26,7 +26,7 @@ class AuthController extends Controller
             'first_name' => 'required|string',
             'last_name'  => 'required|string',
             'location'   => 'nullable|string',
-            'email'      => 'required|string|email|unique:users',
+            'email'      => 'required|string|email',
             'password'   => 'required|string|confirmed|min:8',
         ]);
 
@@ -37,13 +37,35 @@ class AuthController extends Controller
             ]);
         }
 
-        $data = [
-            'name'  => $request->first_name,
-            'email' => $request->email,
-        ];
+        $existingUser = User::where('email', $request->email)->first();
 
-        //send otp
-        $data                = sentOtp($data, 5);
+        if ($existingUser) {
+            if ($existingUser->email_verified_at) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Email is already registered and verified!',
+                ]);
+            } else {
+                // Update the existing user with new data
+                $data                = sentOtp(['name' => $request->first_name, 'email' => $request->email], 5);
+                $existingUser->first_name    = $request->first_name;
+                $existingUser->last_name     = $request->last_name;
+                $existingUser->phone         = $request->phone;
+                $existingUser->role          = $request->role;
+                $existingUser->password      = $request->password;
+                $existingUser->otp           = $data['otp'];
+                $existingUser->otp_expire_at = $data['otp_expire_at'];
+                $existingUser->save();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'User updated successfully! Please check your email for OTP!',
+                ]);
+            }
+        }
+
+        // Create a new user if email does not exist
+        $data                = sentOtp(['name' => $request->first_name, 'email' => $request->email], 5);
         $user                = new User();
         $user->first_name    = $request->first_name;
         $user->last_name     = $request->last_name;

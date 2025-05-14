@@ -31,8 +31,8 @@ class LawyerController extends Controller
             'city' => 'required|string',
             'zipcode' => 'required|string',
             'phone' => 'required|string|unique:users,phone,' . $user->id,
-            'web_link' => 'nullable|url',
-            'linkedin_url' => 'nullable|regex:/^https?:\/\/(www\.)?linkedin\.com\/.*$/i',
+            'web_link' => 'nullable|sometimes|url',
+            'linkedin_url' => 'nullable|sometimes|regex:/^https?:\/\/(www\.)?linkedin\.com\/.*$/i',
             'schedule' => 'nullable|string',
         ],
         [
