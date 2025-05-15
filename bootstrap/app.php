@@ -18,6 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'lawyer' => \App\Http\Middleware\LawyerMiddleware::class,
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
         ]);
+        $middleware->group('api', [
+            \App\Http\Middleware\CorsMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
