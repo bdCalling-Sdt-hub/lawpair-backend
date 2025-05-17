@@ -6,6 +6,7 @@ use App\Models\Lawyer;
 use App\Models\Category;
 use App\Models\Favorite;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Homecontroller extends Controller
@@ -158,7 +159,8 @@ class Homecontroller extends Controller
 
         $lawyers->getCollection()->transform(function($lawyer){
             $avatar = $lawyer->user->avatar;
-            $is_favorite = Favorite::where('lawyer_id', $lawyer->id)->where('user_id', auth()->id())->exists();
+            $userId = Auth::id();
+            $is_favorite = $userId ? Favorite::where('lawyer_id', $lawyer->id)->where('user_id', $userId)->exists() : false;
             $categories = Category::whereIn('id', json_decode($lawyer->service_ids))->pluck('name');
             // if ($avatar) {
             //     $avatar = asset('storage/' . $avatar);
@@ -188,6 +190,6 @@ class Homecontroller extends Controller
         return response()->json([
             'success' => true,
             'lawyers' => $lawyers
-        ], 200);
+        ], 200)->header('Access-Control-Allow-Origin', '*');
     }
 }
