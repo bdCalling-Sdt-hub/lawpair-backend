@@ -77,9 +77,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['jwt.auth', 'admin']], funct
     //settings controller
     Route::controller(SettingController::class)->group(function(){
         Route::post('/update-about', 'updateAbout');
-        Route::get('/about', 'getAbout');
+        Route::get('/about', 'getAbout')->withoutMiddleware(['jwt.auth', 'admin']);
         Route::post('/update-disclaimer', 'updateDisclaimer');
-        Route::get('/disclaimer', 'getDisclaimer');
+        Route::get('/disclaimer', 'getDisclaimer')->withoutMiddleware(['jwt.auth', 'admin']);
     });
 });
 
